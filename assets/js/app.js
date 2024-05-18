@@ -1,4 +1,5 @@
 const appEl = document.getElementById('app');
+const bulletinsEl = document.getElementById('bulletins');
 const NEWS = [
     {
         "source": {
@@ -286,7 +287,7 @@ function handleScrollEnd() {
     const slideIndex = Math.round(scroll.activeSlide);
     const newsFromSlide =  document.getElementById('news-' + slideIndex).textContent;
     const nextSlide = NEWS.length > slideIndex ? slideIndex + 1 : 0;
-    textToSpeech(newsFromSlide, () => { scroll.activeSlide = nextSlide;});
+    // textToSpeech(newsFromSlide, () => { scroll.activeSlide = nextSlide;});
 }
 
 
@@ -345,26 +346,45 @@ const generateNewBulletIn = ()=> {
         thumbnail.classList.add('thumbnail');
         thumbnail.style.backgroundImage = `url(${item.urlToImage})`;
 
+        
         // create Source
         const source = document.createElement('div');
         source.classList.add('source');
         source.textContent = item.source.name;
 
-        // Published date
-        const publishedDate = document.createElement('div');
-        publishedDate.classList.add('published-date');
-        const publisheData = new Date(item.publishedAt);
-        publishedDate.textContent = publisheData.toDateString();
+        // Published on date and time
+        const publishedDate = new Date(item.publishedAt);
+        const publishedOnEl = document.createElement('div');
+            publishedOnEl.classList.add('published-on');
+        // Date
+        const publishedDateEl = document.createElement('span');
+        publishedDateEl.classList.add('published-date');
+            publishedDateEl.textContent = publishedDate.toDateString();
+
+        // Time
+        const publishedTimeEl = document.createElement('span');
+        publishedTimeEl.classList.add('published-time');
+        const HH = publishedDate.getHours() > 12 ? publishedDate.getHours() - 12 : publishedDate.getHours();
+        const time = `${HH}:${publishedDate.getMinutes()} ${publishedDate.getHours() > 12 ? 'PM' : 'AM'}`;
+        publishedTimeEl.textContent = time;
+        publishedOnEl.appendChild(publishedDateEl);
+        publishedOnEl.appendChild(publishedTimeEl);
+        
+
+        // create watermark
+        const watermark = document.createElement('div');
+        watermark.classList.add('watermark');
 
         // Append all elements to the slide
         newsContent.appendChild(newsText);
         newsContent.appendChild(source);
-        newsContent.appendChild(publishedDate);
+        newsContent.appendChild(publishedOnEl);
+        newsContent.appendChild(watermark);
         slide.appendChild(thumbnail);
         slide.appendChild(newsContent);
 
-      // Append the slide to appEl
-        appEl.appendChild(slide);
+      // Append the slide to bulletinsEl
+        bulletinsEl.appendChild(slide);
 
         // Register Window Scroll event listener
         window.addEventListener('scroll', () => {
