@@ -264,6 +264,12 @@ const NEWS = [
 ]
 let scrollTimer;
 let isSpeech = false;
+let voices = [];
+speechSynthesis.onvoiceschanged = function () {
+    voices = speechSynthesis.getVoices();
+};
+
+
 const scroll = {
     height: window.innerHeight,
     get scrollY() {
@@ -287,19 +293,17 @@ function handleScrollEnd() {
     const slideIndex = Math.round(scroll.activeSlide);
     const newsFromSlide =  document.getElementById('news-' + slideIndex).textContent;
     const nextSlide = NEWS.length > slideIndex ? slideIndex + 1 : 0;
-    // textToSpeech(newsFromSlide, () => { scroll.activeSlide = nextSlide;});
+    textToSpeech(newsFromSlide, () => { scroll.activeSlide = nextSlide;});
 }
 
 
 
 
-
-const textToSpeech = (text, onEnd) => {
+const textToSpeech = (text, onEnd) =>  {
     const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = 'en-US';
-    speech.volume = 0.8;
-    speech.rate = 1;
-    speech.pitch = 0.7;
+    console.log(voices)
+    speech.voice = voices[241];
+
 
     // Set event handlers
     speech.onstart = () => {
