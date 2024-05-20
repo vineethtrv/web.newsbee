@@ -1,5 +1,6 @@
 const appEl = document.getElementById('app');
 const bulletinsEl = document.getElementById('bulletins');
+const playBtnEL = document.getElementById('play-btn');
 const NEWS = [
     {
         "source": {
@@ -308,10 +309,12 @@ const textToSpeech = (text, onEnd) =>  {
     // Set event handlers
     speech.onstart = () => {
         isSpeech = true;
+        playBtnEL.classList.add('hide');
     }
 
     speech.onend = () => {
         isSpeech = false;
+        playBtnEL.classList.remove('hide');
         onEnd();
     }
 
@@ -407,5 +410,20 @@ const generateNewBulletIn = ()=> {
 
 // Call the fetchTopHeadlines function
 (async () => {
+
+    // Generate new bulletins
     generateNewBulletIn();
+
+
+    // Play button event listener
+    playBtnEL.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isSpeech) {
+            speechSynthesis.cancel();
+        } else {
+            const slideIndex = Math.round(scroll.activeSlide);
+            const newsFromSlide = document.getElementById('news-' + slideIndex).textContent;
+            textToSpeech(newsFromSlide, () => { scroll.activeSlide = slideIndex + 1; });
+        }
+    })
 })()

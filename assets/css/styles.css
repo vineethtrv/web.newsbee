@@ -163,3 +163,32 @@ body {
     background: #c00101;
     border-radius: 0.35rem;
 }
+
+#play-btn {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: 6rem;
+    height: 6rem;
+    background: #0008;
+    z-index: 20;
+    border: none;
+    border-radius: 50%;
+    border: 3px solid #FFF5;
+    color: #fff;
+    font-size: 6rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#play-btn::after {
+    content: '\e1c4';
+    font-family: 'Material Symbols Outlined';
+    -webkit-font-smoothing: antialiased;
+}
+
+#play-btn.hide {
+    display: none;
+}
